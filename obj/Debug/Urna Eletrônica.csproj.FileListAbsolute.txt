@@ -1,0 +1,10 @@
+C:\Users\shlim\Documents\Documentos\Programação Visual\Urna eletrônica\Urna Eletrônica\Urna Eletrônica\bin\Debug\Urna Eletrônica.exe.config
+C:\Users\shlim\Documents\Documentos\Programação Visual\Urna eletrônica\Urna Eletrônica\Urna Eletrônica\bin\Debug\Urna Eletrônica.exe
+C:\Users\shlim\Documents\Documentos\Programação Visual\Urna eletrônica\Urna Eletrônica\Urna Eletrônica\bin\Debug\Urna Eletrônica.pdb
+C:\Users\shlim\Documents\Documentos\Programação Visual\Urna eletrônica\Urna Eletrônica\Urna Eletrônica\obj\Debug\Urna Eletrônica.csproj.AssemblyReference.cache
+C:\Users\shlim\Documents\Documentos\Programação Visual\Urna eletrônica\Urna Eletrônica\Urna Eletrônica\obj\Debug\Urna_Eletrônica.Form1.resources
+C:\Users\shlim\Documents\Documentos\Programação Visual\Urna eletrônica\Urna Eletrônica\Urna Eletrônica\obj\Debug\Urna_Eletrônica.Properties.Resources.resources
+C:\Users\shlim\Documents\Documentos\Programação Visual\Urna eletrônica\Urna Eletrônica\Urna Eletrônica\obj\Debug\Urna Eletrônica.csproj.GenerateResource.cache
+C:\Users\shlim\Documents\Documentos\Programação Visual\Urna eletrônica\Urna Eletrônica\Urna Eletrônica\obj\Debug\Urna Eletrônica.csproj.CoreCompileInputs.cache
+C:\Users\shlim\Documents\Documentos\Programação Visual\Urna eletrônica\Urna Eletrônica\Urna Eletrônica\obj\Debug\Urna Eletrônica.exe
+C:\Users\shlim\Documents\Documentos\Programação Visual\Urna eletrônica\Urna Eletrônica\Urna Eletrônica\obj\Debug\Urna Eletrônica.pdb
