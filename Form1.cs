@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,9 +18,9 @@ namespace Urna_Eletrônica
         // Lista de candidatos
         private List<Candidato> candidatos = new List<Candidato>
         {
-            new Candidato("Candidato 1", "Partido A", 22, "C:\\Users\\shlim\\Documents\\Documentos\\Programação Visual\\Urna eletrônica\\Urna Eletrônica\\Urna Eletrônica\\CandidatoOne.jpg"),
-            new Candidato("Candidato 2", "Partido B", 13, "C:\\Users\\shlim\\Documents\\Documentos\\Programação Visual\\Urna eletrônica\\Urna Eletrônica\\Urna Eletrônica\\CandidatoTwo.jpg"),
-            new Candidato("Candidato 3", "Partido C", 76, "C:\\Users\\shlim\\Documents\\Documentos\\Programação Visual\\Urna eletrônica\\Urna Eletrônica\\Urna Eletrônica\\CandidatoTre.jpg")
+            new Candidato("Candidato 1", "Partido A", 22, "C:\\Users\\shlim\\Documents\\Documentos\\Programação Visual\\Urna Eletronica\\Urna Eletrônica\\CandidatoOne.jpg"),
+            new Candidato("Candidato 2", "Partido B", 13, "C:\\Users\\shlim\\Documents\\Documentos\\Programação Visual\\Urna Eletronica\\Urna Eletrônica\\CandidatoTwo.jpg"),
+            new Candidato("Candidato 3", "Partido C", 76, "C:\\Users\\shlim\\Documents\\Documentos\\Programação Visual\\Urna Eletronica\\Urna Eletrônica\\CandidatoTre.jpg")
         };
 
         //Armazenar votos
@@ -183,48 +184,77 @@ namespace Urna_Eletrônica
         {
             votosConfirmados.Clear();
 
+            label9.Text = "";
+            label8.Text = "";
+            label7.Text = "";
+            pictureCandidato2.Image = null;
+
+            labelParabens.Text = "";
+            label1.Text = "";
+
+
             MessageBox.Show("Lista de votos limpa com sucesso!");
         }
 
         private void btencerrarvotacao_Click(object sender, EventArgs e)
         {
             var contagemVotos = votosConfirmados.GroupBy(voto => voto)
-                                         .Select(grupo => new { Candidato = grupo.Key, TotalVotos = grupo.Count() })
-                                         .OrderByDescending(resultado => resultado.TotalVotos)
-                                         .ToList();
+                                                .Select(grupo => new { Candidato = grupo.Key, TotalVotos = grupo.Count() })
+                                                .OrderByDescending(resultado => resultado.TotalVotos)
+                                                .ToList();
 
-            // 2. Determinar o vencedor (o candidato com mais votos)
+            // 2. Determinar o vencedor ou verificar empate
             var vencedor = contagemVotos.FirstOrDefault();
+            var segundoColocado = contagemVotos.Skip(1).FirstOrDefault(); // Pega o segundo candidato na lista
 
-            // 3. Exibir os resultados
+            // 3. Exibir os resultados ou mensagem de segundo turno
             if (vencedor != null)
             {
-                // Encontrar o nome do candidato vencedor na lista de candidatos
-                var candidatoVencedor = candidatos.FirstOrDefault(c => c.Numero == vencedor.Candidato);
-                if (candidatoVencedor != null)
+                if (segundoColocado != null && vencedor.TotalVotos == segundoColocado.TotalVotos)
                 {
-                    labelParabens.Text = $"A votação foi encerrada!\nO vencedor é: {candidatoVencedor.Nome} com {vencedor.TotalVotos} votos.";
+                    // Houve empate entre os dois primeiros
+                    MessageBox.Show("Houve empate entre os candidatos mais votados. Será necessário um segundo turno!", "Segundo Turno", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                    // Exibe os detalhes do candidato VENCEDOR
-                    label9.Text = candidatoVencedor.Nome;
-                    label8.Text = candidatoVencedor.Numero.ToString();
-                    label7.Text = candidatoVencedor.Partido;
-                    pictureCandidato2.Image = Image.FromFile(candidatoVencedor.Foto);
+                    // Opcional: Você pode limpar a interface ou realizar outras ações necessárias para o segundo turno aqui.
+                    labelParabens.Text = "Segundo Turno!";
+                    label9.Text = "";
+                    label8.Text = "";
+                    label7.Text = "";
+                    pictureCandidato2.Image = null;
+                    label1.Text = ""; // Limpa os resultados detalhados também
                 }
                 else
                 {
-                    MessageBox.Show($"A votação foi encerrada!\nVencedor (número {vencedor.Candidato}) com {vencedor.TotalVotos} votos.", "Resultado da Votação", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                    // Houve um vencedor
+                    // Encontrar o nome do candidato vencedor na lista de candidatos
+                    var candidatoVencedor = candidatos.FirstOrDefault(c => c.Numero == vencedor.Candidato);
+                    if (candidatoVencedor != null)
+                    {
+                        labelParabens.Text = $"A votação foi encerrada!\nO vencedor é: {candidatoVencedor.Nome} com {vencedor.TotalVotos} votos.";
 
-                // Exibir a contagem de votos para todos os candidatos (opcional)
-                string resultadosDetalhados = "Contagem de Votos:\n";
-                foreach (var resultado in contagemVotos)
-                {
-                    var candidatoDetalhe = candidatos.FirstOrDefault(c => c.Numero == resultado.Candidato);
-                    string nomeDetalhe = candidatoDetalhe != null ? candidatoDetalhe.Nome : $"Candidato {resultado.Candidato}";
-                    resultadosDetalhados += $"{nomeDetalhe}: {resultado.TotalVotos} votos\n";
+                        // Exibe os detalhes do candidato VENCEDOR
+                        label9.Text = candidatoVencedor.Nome;
+                        label8.Text = candidatoVencedor.Numero.ToString();
+                        label7.Text = candidatoVencedor.Partido;
+                        pictureCandidato2.Image = Image.FromFile(candidatoVencedor.Foto);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"A votação foi encerrada!\nVencedor (número {vencedor.Candidato}) com {vencedor.TotalVotos} votos.", "Resultado da Votação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
+                    // Exibir a contagem de votos para todos os candidatos (opcional)
+                    string resultadosDetalhados = "Contagem de Votos:\n";
+                    foreach (var resultado in contagemVotos)
+                    {
+                        var candidatoDetalhe = candidatos.FirstOrDefault(c => c.Numero == resultado.Candidato);
+                        string nomeDetalhe = candidatoDetalhe != null ? candidatoDetalhe.Nome : $"Candidato {resultado.Candidato}";
+                        resultadosDetalhados += $"{nomeDetalhe}: {resultado.TotalVotos} votos\n";
+                    }
+
+                    // Atribui o texto construído à propriedade Text do Label chamado labelResultado
+                    label1.Text = resultadosDetalhados;
                 }
-                MessageBox.Show(resultadosDetalhados, "Detalhes da Votação", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -246,6 +276,16 @@ namespace Urna_Eletrônica
         }
 
         private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labelParabens_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }
